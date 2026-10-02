@@ -32,5 +32,34 @@ pipeline {
                 )
             }
         }
+        stage('Create TF Job') {
+            steps {
+                jobDsl(
+                    scriptText: '''
+                        pipelineJob('TFJOB-createdbyseedjob') {
+                            description('Pipeline created by Seed Job')
+
+                             definition {
+                                cpsScm {
+                                    scm {
+                                        git {
+                                            remote {
+                                            url('https://github.com/anandambitionv2/jenkinspipeline.git')
+
+                                            }
+                                            branch('*/main')
+                                        }
+                    }
+                    scriptPath('JenkinsFile')
+                    lightweight()
+                  }
+                }
+                        }
+                    '''
+                )
+            }
+        }
     }
+    }
+
 }
