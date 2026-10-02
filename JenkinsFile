@@ -1,0 +1,36 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Create Job') {
+            steps {
+                jobDsl(
+                    scriptText: '''
+                        pipelineJob('createdbyseedjob') {
+                            description('Pipeline created by Seed Job')
+
+                            definition {
+                                cps {
+                                    script("""
+                                        pipeline {
+                                            agent any
+
+                                            stages {
+                                                stage('Hello') {
+                                                    steps {
+                                                        echo 'Hello from the generated pipeline!'
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    """.stripIndent())
+                                    sandbox()
+                                }
+                            }
+                        }
+                    '''
+                )
+            }
+        }
+    }
+}
