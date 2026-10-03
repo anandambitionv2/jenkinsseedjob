@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     stages {
+
         stage('Create Job') {
             steps {
                 jobDsl(
@@ -24,6 +25,7 @@ pipeline {
                                             }
                                         }
                                     """.stripIndent())
+
                                     sandbox()
                                 }
                             }
@@ -32,34 +34,35 @@ pipeline {
                 )
             }
         }
+
         stage('Create TF Job') {
             steps {
                 jobDsl(
                     scriptText: '''
                         pipelineJob('TFJOB-createdbyseedjob') {
-                            description('Pipeline created by Seed Job')
+                            description('TF Pipeline created by Seed Job')
 
-                             definition {
+                            definition {
                                 cpsScm {
                                     scm {
                                         git {
                                             remote {
-                                            url('https://github.com/anandambitionv2/jenkinspipeline.git')
-
+                                                url('https://github.com/anandambitionv2/jenkinspipeline.git')
                                             }
+
                                             branch('*/main')
                                         }
-                    }
-                    scriptPath('JenkinsFile')
-                    lightweight()
-                  }
-                }
+                                    }
+
+                                    scriptPath('JenkinsFile')
+                                    lightweight()
+                                }
+                            }
                         }
                     '''
                 )
             }
         }
-    }
-    }
 
+    }
 }
