@@ -7,6 +7,7 @@ pipeline {
             choices: [
                 'createdbyseedjob',
                 'TFJOB-createdbyseedjob'
+                'TFJOB-from-shared-library'
             ],
             description: 'Select which job should be created'
         )
@@ -78,6 +79,40 @@ pipeline {
                                     }
 
                                     scriptPath('JenkinsFile')
+                                    lightweight()
+                                }
+                            }
+                        }
+                    '''
+                )
+            }
+        }
+        stage('TF Job from shared-library') {
+            when {
+                expression {
+                    params.JOB_TO_CREATE == 'TFJOB-from-shared-library'
+                }
+            }
+           
+            steps {
+                jobDsl(
+                    scriptText: '''
+                        pipelineJob('TFJOB-from-shared-library') {
+                            description('TF Pipeline created by Seed Job')
+
+                            definition {
+                                cpsScm {
+                                    scm {
+                                        git {
+                                            remote {
+                                                url('https://github.com/anandambitionv2/jenkinsapppipeline.git')
+                                            }
+
+                                            branch('*/main')
+                                        }
+                                    }
+
+                                    scriptPath('apptf.groovy')
                                     lightweight()
                                 }
                             }
