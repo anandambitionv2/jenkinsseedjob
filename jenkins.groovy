@@ -6,7 +6,7 @@ pipeline {
             name: 'JOB_TO_CREATE',
             choices: [
                 'createdbyseedjob',
-                'TFJOB-createdbyseedjob'
+                'TFJOB-createdbyseedjob',
                 'TFJOB-from-shared-library'
             ],
             description: 'Select which job should be created'
